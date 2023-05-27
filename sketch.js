@@ -1,114 +1,60 @@
-var garden,rabbit,apple,orangeL,redL;
-var gardenImg,rabbitImg,carrotImg,orangeImg,redImg;
+// Range of numbers
+const minNumber = 1;
+const maxNumber = 18;
+let randomNumber = null;
+let generateButton;
 
+// p5.js setup function
+function setup() {
+  createCanvas(windowWidth, windowHeight);
+  textSize(64);
+  textAlign(CENTER, CENTER);
+  frameRate(1);
 
-function preload(){
-  gardenImg = loadImage("garden.png");
-  rabbitImg = loadImage("rabbit.png");
-  appleImg = loadImage("apple.png");
-  orangeImg = loadImage("orangeLeaf.png");
-  redImg = loadImage("redImage.png");
+  generateButton = createButton('Generate Random Number');
+  generateButton.addClass('generate-button');
+  generateButton.position(width / 2 - generateButton.width / 2, height / 2 + 100);
+  generateButton.mousePressed(generateRandomNumber);
 }
 
-
-function setup(){
-  
-  createCanvas(400,400);
-// Moving background
-garden=createSprite(200,200);
-garden.addImage(gardenImg);
-
-
-//creating boy running
-rabbit = createSprite(160,340,20,20);
-rabbit.scale =0.09;
-rabbit.addImage(rabbitImg);
+// Generate a random number between min and max (inclusive)
+function generateRandomNumber() {
+  randomNumber = Math.floor(random(minNumber, maxNumber + 1));
 }
 
+// p5.js draw function
 function draw() {
-  background(0);
-  
-  // boy moving on Xaxis with mouse'
-  rabbit.x = World.mouseX;
-  
-  edges= createEdgeSprites();
-  rabbit.collide(edges);
-  
-   drawSprites();
-   
-  
-// var select_sprites = Math(random(1,3));
+  // Create a cool gradient background
+  setGradient(0, 0, width, height, color(60, 85, 170), color(16, 36, 109));
 
-// var select_sprites = Math.random(random(1,3));
+  if (randomNumber !== null) {
+    // Create a pulsating effect for the text
+    let size = map(sin(frameCount * 0.1), -1, 1, 48, 80);
+    let colorR = map(sin(frameCount * 0.05), -1, 1, 0, 255);
+    let colorG = map(cos(frameCount * 0.05), -1, 1, 0, 255);
+    let colorB = map(sin(frameCount * 0.05), -1, 1, 0, 255);
+    fill(colorR, colorG, colorB);
+    textSize(size);
 
-// var select_sprites = Math.round(1,3);
-
-// var select_sprites = Math.round(random(1,3));
-
-  
-  // if (frameCount % 50 == 0) {
-  //   if (select_sprites == 1) {
-  //     createApples();
-  //   } else if (select_sprites == 2) {
-  //     createOrange();
-  //   }else {
-  //     createRed();
-  //   }
-  // }
-
-  // if (frameCount % 80 == 0) {
-  //   if (select_sprites == 1) {
-  //     createApples();
-  //   } else if (select_sprites == 2) {
-  //     createOrange();
-  //   }
-  // }
-
-  // if (frameCount / 80 == 0) {
-  //   if (select_sprites == 1) {
-  //     createApples();
-  //   } else if (select_sprites == 2) {
-  //     createOrange();
-  //   }else {
-  //     createRed();
-  //   }
-  // }
-
-  // if (frameCount % 80 = 0) {
-  //   if (select_sprites == 1) {
-  //     createApples();
-  //   } else if (select_sprites == 2) {
-  //     createOrange();
-  //   }else {
-  //     createRed();
-  //   }
-  // }
-
-
-
+    // Display the modified text on the screen
+    text("Mr. Gallant's Random Number Generator", width / 2, height / 2 - 100);
+    text('Random Number: ' + randomNumber, width / 2, height / 2);
+  }
 }
 
-function createApples() {
-apple = createSprite(random(50, 350),40, 10, 10);
-apple.addImage(appleImg);
-apple.scale=0.07;
-apple.velocityY = 3;
-apple.lifetime = 150;
-  
+// Resize canvas when the window size changes
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
 }
 
-function createOrange() {
-orangeL = createSprite(random(50, 350),40, 10, 10);
-orangeL.addImage(orangeImg);
-orangeL.scale=0.08;
-orangeL.velocityY = 3;
-orangeL.lifetime = 150;
+// Helper function to create a gradient background
+function setGradient(x, y, w, h, color1, color2) {
+  noFill();
+  for (let i = y; i <= y + h; i++) {
+    let inter = map(i, y, y + h, 0, 1);
+    let c = lerpColor(color1, color2, inter);
+    stroke(c);
+    line(x, i, x + w, i);
+  }
 }
 
-function createRed() {
-redL = createSprite(random(50, 350),40, 10, 10);
-redL.addImage(redImg);
-redL.scale=0.06;
-  redL.velocityY = 3;
-  redL.lifetime = 150;
-}
